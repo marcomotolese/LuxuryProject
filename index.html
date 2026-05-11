@@ -1,0 +1,998 @@
+<!--
+=== GUIDA SOSTITUZIONE FOTO ===
+
+1. LOOK SHOOTING (9 look totali, 3 per attitude — aspect-ratio 3/4 verticale):
+   img/products/ loud-1.jpg … lazy-3.jpg
+
+2. FOTO HERO (1 immagine full screen per attitude):
+   img/hero/hero-loud.jpg, hero-silent.jpg, hero-lazy.jpg
+
+3. FOTO PRODOTTO (2 foto affiancate nello show — aspect-ratio 3/4 verticale):
+   img/products/loud-1a.jpg, loud-1b.jpg … (2 foto per prodotto)
+
+4. Nel JS aggiorna PRODUCTS.imgs[], MODES[].hero e items[].img (copertina = imgs[0]) quando pronte.
+-->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Apartment Cosenza</title>
+  <style>
+    :root {
+      --white: #fff;
+      --black: #111;
+      --gray-light: #f5f4f0;
+      --gray-text: #888;
+      --border: #e8e8e8;
+      --placeholder: #e8e7e3;
+      --bg: var(--white);
+      --fg: var(--black);
+      --muted: var(--gray-text);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: var(--bg);
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-areas: "left logo right";
+      align-items: center;
+      padding: 18px 24px;
+      background: transparent;
+      color: var(--white);
+    }
+
+    .nav.is-scrolled {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      color: var(--fg);
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 9px;
+      letter-spacing: 2px;
+    }
+
+    .nav-left {
+      grid-area: left;
+    }
+
+    .nav-right {
+      grid-area: right;
+      justify-content: flex-end;
+    }
+
+    .nav-logo {
+      grid-area: logo;
+      font-size: 11px;
+      letter-spacing: 4px;
+      font-weight: 400;
+    }
+
+    .nav-icon {
+      color: inherit;
+      opacity: 0.82;
+    }
+
+    .nav.is-scrolled .nav-icon {
+      color: var(--muted);
+      opacity: 1;
+    }
+
+    .nav-icon:hover {
+      opacity: 1;
+    }
+
+    .nav.is-scrolled .nav-icon:hover {
+      color: var(--fg);
+    }
+
+    .nav-toggle {
+      display: none;
+    }
+
+    .nav-drawer {
+      display: contents;
+    }
+
+    #hero {
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+
+    .hero-stage {
+      position: relative;
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: calc(50% - 50vw);
+      min-height: 100vh;
+      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: var(--placeholder);
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      background: var(--placeholder);
+    }
+
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+    }
+
+    .ph-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+
+    .hero-copy {
+      position: absolute;
+      top: 88px;
+      left: 28px;
+      color: var(--white);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-title {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-title-line {
+      font-size: clamp(34px, 6.5vw, 68px);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 0.9;
+      text-transform: uppercase;
+    }
+
+    .hero-title-line--collection {
+      font-size: clamp(42px, 8vw, 88px);
+    }
+
+    .hero-season {
+      align-self: stretch;
+      margin-top: 10px;
+      font-size: clamp(9px, 1.2vw, 12px);
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    .hero-cta {
+      position: absolute;
+      right: 138px;
+      bottom: 218px;
+      z-index: 2;
+      padding: 14px 24px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      border: 1px solid var(--white);
+    }
+
+    .hero-cta:hover {
+      background: transparent;
+      color: var(--white);
+    }
+
+    .outfit-body {
+      padding: 28px 24px 32px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      letter-spacing: 4px;
+      font-weight: 400;
+    }
+
+    .outfit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .outfit-card {
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .outfit-card.is-empty {
+      cursor: default;
+      pointer-events: none;
+      opacity: 0.45;
+    }
+
+    .outfit-card:hover .slot-name {
+      color: var(--muted);
+    }
+
+    .outfit-card.is-empty:hover .slot-name {
+      color: inherit;
+    }
+
+    .outfit-slot {
+      position: relative;
+      background: #f0efeb;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+    }
+
+    .outfit-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slot-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0 0;
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .slot-name {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: lowercase;
+    }
+
+    .slot-price {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .switcher-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
+    .switcher {
+      display: flex;
+      border: 1px solid #e0e0e0;
+      max-width: 420px;
+    }
+
+    .sw-btn {
+      flex: 1;
+      padding: 14px 6px;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: #fff;
+      border: none;
+      border-right: 1px solid #e0e0e0;
+      cursor: pointer;
+      color: #bbb;
+      font-family: inherit;
+    }
+
+    .sw-btn:last-child {
+      border-right: none;
+    }
+
+    .sw-btn.active {
+      background: #111;
+      color: #fff;
+    }
+
+    .sw-btn:hover:not(.active) {
+      color: #555;
+    }
+
+    .mode-desc {
+      font-size: 10px;
+      color: #999;
+      letter-spacing: 0.5px;
+      line-height: 1.8;
+      margin-top: 14px;
+      max-width: 640px;
+      text-transform: none;
+    }
+
+    .cta-btn {
+      padding: 10px 98px;
+      border: 1px solid var(--fg);
+      background: var(--bg);
+      color: var(--fg);
+      font-size: 8px;
+      letter-spacing: 2px;
+    }
+
+    .cta-btn:hover {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    #categories,
+    #special-categories {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .categories-list {
+      list-style: none;
+    }
+
+    .categories-list li {
+      border-top: 1px solid var(--border);
+    }
+
+    .categories-list button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 24px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-align: left;
+    }
+
+    .categories-list button.is-active {
+      background: var(--gray-light);
+    }
+
+    .categories-list button:hover {
+      color: var(--muted);
+    }
+
+    .categories-list span {
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 48px 24px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    .footer-col h3 {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .footer-col p,
+    .footer-col a {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 300;
+    }
+
+    .newsletter-form {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-top: 8px;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font: inherit;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--fg);
+      padding: 8px 0;
+      outline: none;
+    }
+
+    .newsletter-form button {
+      padding: 8px 0 8px 16px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .nav {
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: inherit;
+        opacity: 0.9;
+      }
+
+      .nav-logo {
+        justify-self: center;
+        text-align: center;
+      }
+
+      .nav-drawer {
+        display: none;
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        flex-direction: column;
+        gap: 18px;
+        padding: 18px 16px 22px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        color: var(--fg);
+      }
+
+      .nav.is-open .nav-drawer {
+        display: flex;
+      }
+
+      .nav.is-open .nav-toggle {
+        opacity: 1;
+      }
+
+      .nav.is-open {
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .nav-left,
+      .nav-right {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        width: 100%;
+      }
+
+      .nav-right {
+        justify-content: flex-start;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+
+      .nav-icon {
+        opacity: 1;
+        color: var(--fg);
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .hero-copy {
+        top: 84px;
+        left: 16px;
+        right: 16px;
+        max-width: calc(100% - 32px);
+      }
+
+      .hero-title-line {
+        font-size: clamp(28px, 11vw, 44px);
+      }
+
+      .hero-title-line--collection {
+        font-size: clamp(32px, 12vw, 52px);
+      }
+
+      .hero-season {
+        margin-top: 8px;
+        font-size: 9px;
+        letter-spacing: 0.22em;
+      }
+
+      .hero-cta {
+        left: 16px;
+        right: auto;
+        bottom: 28px;
+        bottom: max(28px, env(safe-area-inset-bottom));
+      }
+
+      .outfit-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="nav">
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-drawer" aria-label="Apri menu">Menu</button>
+      <a href="#hero" class="nav-logo">The Apartment</a>
+      <div class="nav-drawer" id="nav-drawer">
+        <div class="nav-left">
+          <button type="button" class="nav-icon" aria-label="Cerca">Search</button>
+        </div>
+        <div class="nav-right">
+          <button type="button" class="nav-icon" aria-label="Preferiti">Wishlist</button>
+          <button type="button" class="nav-cart nav-icon" id="cart-toggle" aria-label="Carrello">Cart (<span class="cart-count" id="cart-count">0</span>)</button>
+          <button type="button" class="nav-icon" aria-label="Account">Account</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="hero">
+        <div class="hero-stage">
+          <div class="hero-media" id="hero-media">
+            <span class="ph-label">Inserisci foto hero</span>
+          </div>
+          <div class="hero-copy">
+            <div class="hero-title">
+              <span class="hero-title-line">New</span>
+              <span class="hero-title-line hero-title-line--collection">Collection</span>
+            </div>
+            <p class="hero-season">Spring SS25</p>
+          </div>
+          <a href="#categories" class="hero-cta">Shop now</a>
+        </div>
+        <div class="outfit-body">
+          <div class="section-header">
+            <h2 class="section-title">Ready-to-wear</h2>
+          </div>
+          <div class="outfit-grid">
+            <article class="outfit-slot-wrap outfit-card" data-slot="0" data-product-id="1" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
+              <div class="outfit-slot" id="slot-1"><span class="ph-label">Look 1</span></div>
+              <div class="slot-meta">
+                <span class="slot-name" id="slot-name-1">Blazer oversize</span>
+                <span class="slot-price" id="slot-price-1">€ 380</span>
+              </div>
+            </article>
+            <article class="outfit-slot-wrap outfit-card" data-slot="1" data-product-id="2" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
+              <div class="outfit-slot" id="slot-2"><span class="ph-label">Look 2</span></div>
+              <div class="slot-meta">
+                <span class="slot-name" id="slot-name-2">Gonna midi</span>
+                <span class="slot-price" id="slot-price-2">€ 220</span>
+              </div>
+            </article>
+            <article class="outfit-slot-wrap outfit-card" data-slot="2" data-product-id="3" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
+              <div class="outfit-slot" id="slot-3"><span class="ph-label">Look 3</span></div>
+              <div class="slot-meta">
+                <span class="slot-name" id="slot-name-3">Top strutturato</span>
+                <span class="slot-price" id="slot-price-3">€ 160</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="categories">
+        <div class="section-header" style="padding:28px 24px 18px;margin-bottom:0">
+          <h2 class="section-title">Categories</h2>
+        </div>
+        <ul class="categories-list" id="categories-list">
+          <li><button type="button" data-category="clothes" onclick="filterCategory('clothes', this)">Clothes <span>/</span></button></li>
+          <li><button type="button" data-category="shoes" onclick="filterCategory('shoes', this)">Shoes <span>/</span></button></li>
+          <li><button type="button" data-category="bags" onclick="filterCategory('bags', this)">Bags <span>/</span></button></li>
+          <li><button type="button" data-category="accessories" onclick="filterCategory('accessories', this)">Accessories <span>/</span></button></li>
+        </ul>
+      </section>
+
+      <section id="special-categories">
+        <div class="section-header" style="padding:28px 24px 18px;margin-bottom:0">
+          <h2 class="section-title">Special Categories</h2>
+        </div>
+        <ul class="categories-list" id="special-categories-list">
+          <li><button type="button" data-mode="loud" onclick="filterAttitude('loud', this)">Loud <span>/</span></button></li>
+          <li><button type="button" data-mode="silent" onclick="filterAttitude('silent', this)">Silent <span>/</span></button></li>
+          <li><button type="button" data-mode="lazy" onclick="filterAttitude('lazy', this)">Lazy <span>/</span></button></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer" id="contact">
+      <div class="footer-grid">
+        <div class="footer-col" id="about">
+          <h3>The Apartment Cosenza</h3>
+          <p>Via Roma 12, 87100 Cosenza</p>
+          <p>info@theapartmentcosenza.it</p>
+        </div>
+        <div class="footer-col">
+          <h3>Newsletter</h3>
+          <form class="newsletter-form" id="newsletter-form" action="#" method="post">
+            <input type="email" name="email" placeholder="La tua email" aria-label="Email" required>
+            <button type="submit">Invia</button>
+          </form>
+        </div>
+        <div class="footer-col">
+          <h3>Social</h3>
+          <a href="#">Instagram</a>
+          <a href="#">Pinterest</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const CATEGORY_TAGS = {
+      clothes: ["Blazer", "Gonna", "Top", "Pantaloni", "Knitwear"],
+      shoes: ["Calzature"],
+      bags: ["Borse"],
+      accessories: ["Accessories"]
+    };
+
+    const MODES = {
+      loud: {
+        desc: "Pezzi statement, silhouette forti, colori decisi. Dressing che non passa inosservato.",
+        keyword: "Statement · Bold · Strong silhouette",
+        outfitTotal: 760,
+        hero: "",
+        items: [
+          { id: 1, name: "Blazer oversize", price: 380, img: "" },
+          { id: 2, name: "Gonna midi drappeggiata", price: 220, img: "" },
+          { id: 3, name: "Top strutturato", price: 160, img: "" }
+        ]
+      },
+      silent: {
+        desc: "Tailoring impeccabile, palette neutra, iconico. Il lusso che non ha bisogno di parlare.",
+        keyword: "Tailoring · Palette neutra · Iconico",
+        outfitTotal: 820,
+        hero: "",
+        items: [
+          { id: 4, name: "Blazer sartoriale", price: 420, img: "" },
+          { id: 5, name: "Pantalone wide leg", price: 260, img: "" },
+          { id: 6, name: "Canotta in seta", price: 140, img: "" }
+        ]
+      },
+      lazy: {
+        desc: "Relaxed luxury, knitwear, layering morbido. Comfort che è comunque uno statement.",
+        keyword: "Relaxed luxury · Knitwear · Layering soft",
+        outfitTotal: 610,
+        hero: "",
+        items: [
+          { id: 7, name: "Maglia oversize", price: 195, img: "" },
+          { id: 8, name: "Jogger in lino", price: 175, img: "" },
+          { id: 9, name: "Cardigan lungo", price: 240, img: "" }
+        ]
+      }
+    };
+
+    const PRODUCTS = [
+      { id: 1, name: "Blazer oversize", price: 380, attitude: "loud", tag: "Blazer", img: "", imgs: ["", ""], desc: "Blazer oversize in lana compatta, spalle strutturate e finiture nette per un mood loud." },
+      { id: 2, name: "Gonna midi drappeggiata", price: 220, attitude: "loud", tag: "Gonna", img: "", imgs: ["", ""], desc: "Gonna midi con drappeggio fluido e cintura minimal, pensata per movimento e volume." },
+      { id: 3, name: "Top strutturato", price: 160, attitude: "loud", tag: "Top", img: "", imgs: ["", ""], desc: "Top strutturato con linea decisa e scollo pulito, base statement per l'outfit loud." },
+      { id: 4, name: "Blazer sartoriale", price: 420, attitude: "silent", tag: "Blazer", img: "", imgs: ["", ""], desc: "Blazer sartoriale in palette neutra, taglio preciso e finiture discrete." },
+      { id: 5, name: "Pantalone wide leg", price: 260, attitude: "silent", tag: "Pantaloni", img: "", imgs: ["", ""], desc: "Pantalone wide leg con caduta morbida e vita alta, silhouette silenziosa e iconica." },
+      { id: 6, name: "Canotta in seta", price: 140, attitude: "silent", tag: "Top", img: "", imgs: ["", ""], desc: "Canotta in seta leggera, layering essenziale per un look silent raffinato." },
+      { id: 7, name: "Maglia oversize", price: 195, attitude: "lazy", tag: "Knitwear", img: "", imgs: ["", ""], desc: "Maglia oversize in cashmere misto, volume morbido e comfort da relaxed luxury." },
+      { id: 8, name: "Jogger in lino", price: 175, attitude: "lazy", tag: "Pantaloni", img: "", imgs: ["", ""], desc: "Jogger in lino con cintura coulisse e linea decontratta per il mood lazy." },
+      { id: 9, name: "Cardigan lungo", price: 240, attitude: "lazy", tag: "Knitwear", img: "", imgs: ["", ""], desc: "Cardigan lungo aperto, layering soft per completare l'outfit lazy." }
+    ];
+
+    let cart = [];
+    let activeMode = "loud";
+    let displayedItems = MODES.loud.items.slice();
+    let activeCategory = null;
+    let activeCategoryButton = null;
+
+    function findProduct(item) {
+      if (!item) return null;
+      if (item.id) {
+        return PRODUCTS.find(function (p) { return p.id === item.id; }) || null;
+      }
+      return PRODUCTS.find(function (p) {
+        return p.attitude === activeMode && p.name === item.name;
+      }) || null;
+    }
+
+    function getProductImages(product, item) {
+      if (product && product.imgs && product.imgs.length) {
+        return product.imgs;
+      }
+      if (item && item.imgs && item.imgs.length) {
+        return item.imgs;
+      }
+      const cover = (product && product.img) || (item && item.img);
+      return cover ? [cover] : [];
+    }
+
+    function getProductCover(product, item) {
+      return getProductImages(product, item)[0] || "";
+    }
+
+    function setMode(mode) {
+      const m = MODES[mode];
+      activeMode = mode;
+
+      document.querySelectorAll("#special-categories-list button").forEach(function (btn) {
+        btn.classList.toggle("is-active", btn.dataset.mode === mode);
+      });
+
+      activeCategory = null;
+      activeCategoryButton = null;
+      document.querySelectorAll("#categories-list button").forEach(function (btn) {
+        btn.classList.remove("is-active");
+      });
+
+      sessionStorage.setItem("attitude", mode);
+      updateHeroMedia(mode, m);
+      updateOutfitSlots(m.items);
+    }
+
+    function updateHeroMedia(mode, modeData) {
+      const hero = document.getElementById("hero-media");
+      if (modeData.hero) {
+        hero.innerHTML = '<img src="' + modeData.hero + '" alt="Hero ' + mode + '">';
+        return;
+      }
+      hero.innerHTML = '<span class="ph-label">Inserisci foto hero ' + mode + '</span>';
+    }
+
+    function updateOutfitSlots(items) {
+      displayedItems = items.slice(0, 3);
+
+      for (let index = 0; index < 3; index += 1) {
+        const i = index + 1;
+        const card = document.querySelector('.outfit-card[data-slot="' + index + '"]');
+        const slot = document.getElementById("slot-" + i);
+        const nameEl = document.getElementById("slot-name-" + i);
+        const priceEl = document.getElementById("slot-price-" + i);
+        const item = displayedItems[index];
+
+        if (!card || !slot || !nameEl || !priceEl) continue;
+
+        if (!item) {
+          card.removeAttribute("data-product-id");
+          card.classList.add("is-empty");
+          card.setAttribute("aria-disabled", "true");
+          nameEl.textContent = "";
+          priceEl.textContent = "";
+          slot.innerHTML = '<span class="ph-label">—</span>';
+          continue;
+        }
+
+        const product = findProduct(item);
+        const name = product ? product.name : item.name;
+        nameEl.textContent = name;
+        priceEl.textContent = "€ " + item.price.toLocaleString("it-IT");
+
+        if (product) {
+          card.setAttribute("data-product-id", String(product.id));
+          card.classList.remove("is-empty");
+          card.setAttribute("aria-disabled", "false");
+        } else {
+          card.removeAttribute("data-product-id");
+          card.classList.add("is-empty");
+          card.setAttribute("aria-disabled", "true");
+        }
+
+        const cover = getProductCover(product, item);
+        if (cover) {
+          slot.innerHTML = '<img src="' + cover + '" alt="' + name + '">';
+        } else {
+          slot.innerHTML = '<span class="ph-label">Look ' + i + '</span>';
+        }
+      }
+    }
+
+    function goToProduct(event) {
+      const card = event.currentTarget;
+      let productId = card && card.getAttribute("data-product-id");
+
+      if (!productId) {
+        const slot = Number(card.getAttribute("data-slot"));
+        const item = displayedItems[slot];
+        const product = findProduct(item);
+        if (product) productId = String(product.id);
+      }
+
+      if (!productId) return;
+
+      sessionStorage.setItem("activeProductId", productId);
+      location.assign("product.html?id=" + encodeURIComponent(productId));
+    }
+
+    function filterAttitude(mode, btn) {
+      setMode(mode);
+
+      document.querySelectorAll("#special-categories-list button").forEach(function (button) {
+        button.classList.toggle("is-active", button === btn);
+      });
+
+      const outfitBody = document.querySelector(".outfit-body");
+      if (outfitBody) {
+        outfitBody.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function filterCategory(category, btn) {
+      activeCategory = category;
+      activeCategoryButton = btn;
+
+      document.querySelectorAll("#categories-list button").forEach(function (button) {
+        button.classList.toggle("is-active", button === btn);
+      });
+
+      const tags = CATEGORY_TAGS[category] || [];
+      const filtered = PRODUCTS.filter(function (p) {
+        return p.attitude === activeMode && tags.indexOf(p.tag) !== -1;
+      });
+
+      if (filtered.length) {
+        updateOutfitSlots(filtered.slice(0, 3).map(function (p) {
+          return { id: p.id, name: p.name, price: p.price, img: p.img, imgs: p.imgs };
+        }));
+        return;
+      }
+
+      updateOutfitSlots(MODES[activeMode].items);
+    }
+
+    function addToCart(id) {
+      const p = PRODUCTS.find(function (x) { return x.id === id; });
+      if (!p) return;
+      cart.push(p);
+      sessionStorage.setItem("cart", JSON.stringify(cart.map(function (item) { return item.id; })));
+      document.querySelector(".cart-count").textContent = cart.length;
+    }
+
+    try {
+      const savedCart = JSON.parse(sessionStorage.getItem("cart") || "[]");
+      cart = savedCart.map(function (id) {
+        return PRODUCTS.find(function (product) { return product.id === id; });
+      }).filter(Boolean);
+      document.querySelector(".cart-count").textContent = cart.length;
+    } catch (error) {
+      cart = [];
+    }
+
+    document.body.style.overflow = "";
+
+    const savedRaw = sessionStorage.getItem("attitude") || "loud";
+    const saved = savedRaw === "laze" ? "lazy" : savedRaw;
+    setMode(saved);
+
+    const nav = document.querySelector(".nav");
+    function syncNav() {
+      nav.classList.toggle("is-scrolled", window.scrollY > 48);
+    }
+    syncNav();
+    window.addEventListener("scroll", syncNav, { passive: true });
+
+    const navToggle = document.querySelector(".nav-toggle");
+    const navDrawer = document.getElementById("nav-drawer");
+
+    function closeNavMenu() {
+      nav.classList.remove("is-open");
+      if (navToggle) {
+        navToggle.setAttribute("aria-expanded", "false");
+        navToggle.textContent = "Menu";
+        navToggle.setAttribute("aria-label", "Apri menu");
+      }
+      document.body.style.overflow = "";
+    }
+
+    if (navToggle && navDrawer) {
+      navToggle.addEventListener("click", function () {
+        const open = !nav.classList.contains("is-open");
+        nav.classList.toggle("is-open", open);
+        navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        navToggle.textContent = open ? "Chiudi" : "Menu";
+        navToggle.setAttribute("aria-label", open ? "Chiudi menu" : "Apri menu");
+        document.body.style.overflow = open ? "hidden" : "";
+      });
+
+      document.addEventListener("click", function (event) {
+        if (!nav.classList.contains("is-open")) return;
+        if (nav.contains(event.target)) return;
+        closeNavMenu();
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && nav.classList.contains("is-open")) {
+          closeNavMenu();
+        }
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) closeNavMenu();
+      });
+    }
+
+    document.getElementById("newsletter-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      this.reset();
+    });
+  </script>
+</body>
+</html>
