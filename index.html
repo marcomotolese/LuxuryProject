@@ -155,45 +155,35 @@
       display: contents;
     }
 
-  /* Modifica o aggiungi questa regola */
-#hero {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  border-bottom: 1px solid var(--border);
-  padding: 0;
-}
+    #hero {
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
 
-   .hero-stage {
-  position: relative;
-  width: 100%;
-  height: 100vh; /* Copre l'altezza dello schermo */
-  height: 100dvh;
-  overflow: hidden;
-  background: var(--placeholder);
-}
+    .hero-stage {
+      position: relative;
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: calc(50% - 50vw);
+      min-height: 100vh;
+      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: var(--placeholder);
+    }
 
-.hero-media {
-  position: absolute;
-  inset: 0;
-}
-
-.hero-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Cambiato da contain a cover per il full screen */
-  object-position: center center;
-  display: block;
-}
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      background: var(--placeholder);
+    }
 
     .hero-media img {
       width: 100%;
       height: 100%;
       max-width: none;
-      object-fit: contain;
+      object-fit: cover;
     }
 
     .ph-label {
