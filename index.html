@@ -5,12 +5,15 @@
    img/products/ loud-1.jpg … lazy-3.jpg
 
 2. FOTO HERO (1 immagine full screen per attitude):
-   img/hero/hero-loud.jpg, hero-silent.jpg, hero-lazy.jpg
+   img/hero/hero.png (oppure hero-loud.jpg, hero-silent.jpg, hero-lazy.jpg)
 
 3. FOTO PRODOTTO (2 foto affiancate nello show — aspect-ratio 3/4 verticale):
    img/products/loud-1a.jpg, loud-1b.jpg … (2 foto per prodotto)
 
 4. Nel JS aggiorna PRODUCTS.imgs[], MODES[].hero e items[].img (copertina = imgs[0]) quando pronte.
+
+5. DIGITAL FITTING ROOM (PNG senza sfondo, trascinabili sul manichino):
+   img/fitting/1.png … 9.png (un file per prodotto; oppure PRODUCTS[].fitting per path custom).
 -->
 <!DOCTYPE html>
 <html lang="it">
@@ -18,6 +21,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Apartment Cosenza</title>
+  <link rel="stylesheet" href="css/fitting-room.css">
   <style>
     :root {
       --white: #fff;
@@ -430,6 +434,22 @@
       color: var(--muted);
     }
 
+    .special-group {
+      border-top: 1px solid var(--border);
+    }
+
+    .special-group-title {
+      padding: 22px 24px 10px;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: #aaa;
+    }
+
+    .categories-list--nested button {
+      padding-left: 40px;
+      font-size: 10px;
+    }
+
     .footer {
       padding: 48px 24px;
     }
@@ -622,7 +642,7 @@
               <span class="hero-title-line">New</span>
               <span class="hero-title-line hero-title-line--collection">Collection</span>
             </div>
-            <p class="hero-season">Spring SS25</p>
+            <p class="hero-season">Spring SS26</p>
           </div>
           <a href="#categories" class="hero-cta">Shop now</a>
         </div>
@@ -656,6 +676,66 @@
         </div>
       </section>
 
+      <section id="fitting-room" class="fitting-room" aria-label="Digital fitting room virtuale">
+        <div class="fitting-room-body">
+          <div class="section-header">
+            <h2 class="section-title">Digital fitting room</h2>
+          </div>
+          <p class="fitting-hint">Trascina i pezzi senza sfondo sul manichino oppure tocca una card per indossarli nello slot corretto.</p>
+          <div class="fitting-layout">
+            <aside class="fitting-palette">
+              <h3 class="fitting-panel-title">Seleziona pezzi</h3>
+              <div class="fitting-pieces" data-fitting-pieces></div>
+            </aside>
+            <div class="fitting-stage">
+              <div class="fitting-mannequin">
+                <div class="fitting-figure" aria-hidden="true">
+                  <svg viewBox="0 0 200 320" role="presentation">
+                    <circle cx="100" cy="34" r="18" fill="#eceae4"></circle>
+                    <rect x="72" y="56" width="56" height="88" rx="6" fill="#eceae4"></rect>
+                    <rect x="48" y="68" width="24" height="72" rx="8" fill="#eceae4"></rect>
+                    <rect x="128" y="68" width="24" height="72" rx="8" fill="#eceae4"></rect>
+                    <rect x="78" y="144" width="44" height="96" rx="6" fill="#eceae4"></rect>
+                    <rect x="72" y="240" width="24" height="56" rx="8" fill="#eceae4"></rect>
+                    <rect x="104" y="240" width="24" height="56" rx="8" fill="#eceae4"></rect>
+                  </svg>
+                </div>
+                <div class="fitting-zone fitting-zone--top" data-fitting-zone="top">
+                  <span class="fitting-zone-label">Top · Maglia</span>
+                  <div class="fitting-layer-viewport" data-fitting-layer-viewport>
+                    <img class="fitting-layer" data-fitting-layer alt="">
+                  </div>
+                </div>
+                <div class="fitting-zone fitting-zone--bottom" data-fitting-zone="bottom">
+                  <span class="fitting-zone-label">Gonna · Pantaloni</span>
+                  <div class="fitting-layer-viewport" data-fitting-layer-viewport>
+                    <img class="fitting-layer" data-fitting-layer alt="">
+                  </div>
+                </div>
+                <div class="fitting-zone fitting-zone--shoes" data-fitting-zone="shoes">
+                  <span class="fitting-zone-label">Scarpe</span>
+                  <div class="fitting-layer-viewport" data-fitting-layer-viewport>
+                    <img class="fitting-layer" data-fitting-layer alt="">
+                  </div>
+                </div>
+                <div class="fitting-zone fitting-zone--accessory" data-fitting-zone="accessory">
+                  <span class="fitting-zone-label">Accessori · Borsa</span>
+                  <div class="fitting-layer-viewport" data-fitting-layer-viewport>
+                    <img class="fitting-layer" data-fitting-layer alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <aside class="fitting-summary">
+              <h3 class="fitting-panel-title">Outfit corrente</h3>
+              <div data-fitting-current>
+                <p class="fitting-empty">Nessun pezzo selezionato</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
       <section id="categories">
         <div class="section-header" style="padding:28px 24px 18px;margin-bottom:0">
           <h2 class="section-title">Categories</h2>
@@ -672,11 +752,14 @@
         <div class="section-header" style="padding:28px 24px 18px;margin-bottom:0">
           <h2 class="section-title">Special Categories</h2>
         </div>
-        <ul class="categories-list" id="special-categories-list">
-          <li><button type="button" data-mode="loud" onclick="filterAttitude('loud', this)">Loud <span>/</span></button></li>
-          <li><button type="button" data-mode="silent" onclick="filterAttitude('silent', this)">Silent <span>/</span></button></li>
-          <li><button type="button" data-mode="lazy" onclick="filterAttitude('lazy', this)">Lazy <span>/</span></button></li>
-        </ul>
+        <div class="special-group">
+          <p class="special-group-title">Attitude</p>
+          <ul class="categories-list categories-list--nested" id="special-categories-list">
+            <li><button type="button" data-mode="loud" onclick="filterAttitude('loud', this)">Loud <span>/</span></button></li>
+            <li><button type="button" data-mode="silent" onclick="filterAttitude('silent', this)">Silent <span>/</span></button></li>
+            <li><button type="button" data-mode="lazy" onclick="filterAttitude('lazy', this)">Lazy <span>/</span></button></li>
+          </ul>
+        </div>
       </section>
     </main>
 
@@ -703,6 +786,7 @@
     </footer>
   </div>
 
+  <script src="js/fitting-room.js"></script>
   <script>
     const CATEGORY_TAGS = {
       clothes: ["Blazer", "Gonna", "Top", "Pantaloni", "Knitwear"],
@@ -716,7 +800,7 @@
         desc: "Pezzi statement, silhouette forti, colori decisi. Dressing che non passa inosservato.",
         keyword: "Statement · Bold · Strong silhouette",
         outfitTotal: 760,
-        hero: "",
+        hero: "img/hero/hero.png",
         items: [
           { id: 1, name: "Blazer oversize", price: 380, img: "" },
           { id: 2, name: "Gonna midi drappeggiata", price: 220, img: "" },
@@ -727,7 +811,7 @@
         desc: "Tailoring impeccabile, palette neutra, iconico. Il lusso che non ha bisogno di parlare.",
         keyword: "Tailoring · Palette neutra · Iconico",
         outfitTotal: 820,
-        hero: "",
+        hero: "img/hero/hero.png",
         items: [
           { id: 4, name: "Blazer sartoriale", price: 420, img: "" },
           { id: 5, name: "Pantalone wide leg", price: 260, img: "" },
@@ -738,7 +822,7 @@
         desc: "Relaxed luxury, knitwear, layering morbido. Comfort che è comunque uno statement.",
         keyword: "Relaxed luxury · Knitwear · Layering soft",
         outfitTotal: 610,
-        hero: "",
+        hero: "img/hero/hero.png",
         items: [
           { id: 7, name: "Maglia oversize", price: 195, img: "" },
           { id: 8, name: "Jogger in lino", price: 175, img: "" },
@@ -756,7 +840,8 @@
       { id: 6, name: "Canotta in seta", price: 140, attitude: "silent", tag: "Top", img: "", imgs: ["", ""], desc: "Canotta in seta leggera, layering essenziale per un look silent raffinato." },
       { id: 7, name: "Maglia oversize", price: 195, attitude: "lazy", tag: "Knitwear", img: "", imgs: ["", ""], desc: "Maglia oversize in cashmere misto, volume morbido e comfort da relaxed luxury." },
       { id: 8, name: "Jogger in lino", price: 175, attitude: "lazy", tag: "Pantaloni", img: "", imgs: ["", ""], desc: "Jogger in lino con cintura coulisse e linea decontratta per il mood lazy." },
-      { id: 9, name: "Cardigan lungo", price: 240, attitude: "lazy", tag: "Knitwear", img: "", imgs: ["", ""], desc: "Cardigan lungo aperto, layering soft per completare l'outfit lazy." }
+      { id: 9, name: "Cardigan lungo", price: 240, attitude: "lazy", tag: "Knitwear", img: "", imgs: ["", ""], desc: "Cardigan lungo aperto, layering soft per completare l'outfit lazy." },
+      { id: 10, name: "Sneaker in pelle", price: 290, attitude: "loud", tag: "Calzature", img: "", imgs: ["", ""], desc: "Sneaker in pelle nera, linea pulita e suola chunky per completare il look loud." }
     ];
 
     let cart = [];
@@ -764,6 +849,7 @@
     let displayedItems = MODES.loud.items.slice();
     let activeCategory = null;
     let activeCategoryButton = null;
+    let fittingRoom = null;
 
     function findProduct(item) {
       if (!item) return null;
@@ -807,6 +893,7 @@
       sessionStorage.setItem("attitude", mode);
       updateHeroMedia(mode, m);
       updateOutfitSlots(m.items);
+      if (fittingRoom) fittingRoom.reset();
     }
 
     function updateHeroMedia(mode, modeData) {
@@ -941,6 +1028,12 @@
     const savedRaw = sessionStorage.getItem("attitude") || "loud";
     const saved = savedRaw === "laze" ? "lazy" : savedRaw;
     setMode(saved);
+
+    fittingRoom = FittingRoom.init({
+      root: "#fitting-room",
+      products: PRODUCTS,
+      getMode: function () { return activeMode; }
+    });
 
     const nav = document.querySelector(".nav");
     function syncNav() {

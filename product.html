@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Apartment Cosenza — Prodotto</title>
+  <link rel="stylesheet" href="css/fitting-room.css">
   <style>
     :root {
       --white: #fff;
@@ -423,9 +424,70 @@
           </div>
         </aside>
       </div>
+
+      <section id="fitting-room" class="fitting-room" aria-label="Digital fitting room virtuale">
+        <div class="fitting-room-body">
+          <div class="section-header" style="padding:0 0 18px;margin-bottom:0;border-bottom:1px solid var(--border)">
+            <h2 class="section-title" style="font-size:11px;letter-spacing:4px;font-weight:400">Digital fitting room</h2>
+          </div>
+          <p class="fitting-hint">Trascina i pezzi senza sfondo sul manichino oppure tocca una card per indossarli nello slot corretto.</p>
+          <div class="fitting-layout">
+            <aside class="fitting-palette">
+              <h3 class="fitting-panel-title">Seleziona pezzi</h3>
+              <div class="fitting-pieces" data-fitting-pieces></div>
+            </aside>
+            <div class="fitting-stage">
+              <div class="fitting-mannequin">
+                <div class="fitting-figure" aria-hidden="true">
+                  <svg viewBox="0 0 200 320" role="presentation">
+                    <circle cx="100" cy="34" r="18" fill="#eceae4"></circle>
+                    <rect x="72" y="56" width="56" height="88" rx="6" fill="#eceae4"></rect>
+                    <rect x="48" y="68" width="24" height="72" rx="8" fill="#eceae4"></rect>
+                    <rect x="128" y="68" width="24" height="72" rx="8" fill="#eceae4"></rect>
+                    <rect x="78" y="144" width="44" height="96" rx="6" fill="#eceae4"></rect>
+                    <rect x="72" y="240" width="24" height="56" rx="8" fill="#eceae4"></rect>
+                    <rect x="104" y="240" width="24" height="56" rx="8" fill="#eceae4"></rect>
+                  </svg>
+                </div>
+                <div class="fitting-zone fitting-zone--top" data-fitting-zone="top">
+                  <span class="fitting-zone-label">Top · Maglia</span>
+                  <div class="fitting-layer-viewport" data-fitting-layer-viewport>
+                    <img class="fitting-layer" data-fitting-layer alt="">
+                  </div>
+                </div>
+                <div class="fitting-zone fitting-zone--bottom" data-fitting-zone="bottom">
+                  <span class="fitting-zone-label">Gonna · Pantaloni</span>
+                  <div class="fitting-layer-viewport" data-fitting-layer-viewport>
+                    <img class="fitting-layer" data-fitting-layer alt="">
+                  </div>
+                </div>
+                <div class="fitting-zone fitting-zone--shoes" data-fitting-zone="shoes">
+                  <span class="fitting-zone-label">Scarpe</span>
+                  <div class="fitting-layer-viewport" data-fitting-layer-viewport>
+                    <img class="fitting-layer" data-fitting-layer alt="">
+                  </div>
+                </div>
+                <div class="fitting-zone fitting-zone--accessory" data-fitting-zone="accessory">
+                  <span class="fitting-zone-label">Accessori · Borsa</span>
+                  <div class="fitting-layer-viewport" data-fitting-layer-viewport>
+                    <img class="fitting-layer" data-fitting-layer alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <aside class="fitting-summary">
+              <h3 class="fitting-panel-title">Outfit corrente</h3>
+              <div data-fitting-current>
+                <p class="fitting-empty">Nessun pezzo selezionato</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
+  <script src="js/fitting-room.js"></script>
   <script>
     const MODES = {
       loud: {
@@ -446,18 +508,20 @@
     };
 
     const PRODUCTS = [
-      { id: 1, name: "Blazer oversize", price: 380, attitude: "loud", img: "", imgs: ["", ""], desc: "Blazer oversize in lana compatta, spalle strutturate e finiture nette per un mood loud." },
-      { id: 2, name: "Gonna midi drappeggiata", price: 220, attitude: "loud", img: "", imgs: ["", ""], desc: "Gonna midi con drappeggio fluido e cintura minimal, pensata per movimento e volume." },
-      { id: 3, name: "Top strutturato", price: 160, attitude: "loud", img: "", imgs: ["", ""], desc: "Top strutturato con linea decisa e scollo pulito, base statement per l'outfit loud." },
-      { id: 4, name: "Blazer sartoriale", price: 420, attitude: "silent", img: "", imgs: ["", ""], desc: "Blazer sartoriale in palette neutra, taglio preciso e finiture discrete." },
-      { id: 5, name: "Pantalone wide leg", price: 260, attitude: "silent", img: "", imgs: ["", ""], desc: "Pantalone wide leg con caduta morbida e vita alta, silhouette silenziosa e iconica." },
-      { id: 6, name: "Canotta in seta", price: 140, attitude: "silent", img: "", imgs: ["", ""], desc: "Canotta in seta leggera, layering essenziale per un look silent raffinato." },
-      { id: 7, name: "Maglia oversize", price: 195, attitude: "lazy", img: "", imgs: ["", ""], desc: "Maglia oversize in cashmere misto, volume morbido e comfort da relaxed luxury." },
-      { id: 8, name: "Jogger in lino", price: 175, attitude: "lazy", img: "", imgs: ["", ""], desc: "Jogger in lino con cintura coulisse e linea decontratta per il mood lazy." },
-      { id: 9, name: "Cardigan lungo", price: 240, attitude: "lazy", img: "", imgs: ["", ""], desc: "Cardigan lungo aperto, layering soft per completare l'outfit lazy." }
+      { id: 1, name: "Blazer oversize", price: 380, attitude: "loud", tag: "Blazer", img: "", imgs: ["", ""], desc: "Blazer oversize in lana compatta, spalle strutturate e finiture nette per un mood loud." },
+      { id: 2, name: "Gonna midi drappeggiata", price: 220, attitude: "loud", tag: "Gonna", img: "", imgs: ["", ""], desc: "Gonna midi con drappeggio fluido e cintura minimal, pensata per movimento e volume." },
+      { id: 3, name: "Top strutturato", price: 160, attitude: "loud", tag: "Top", img: "", imgs: ["", ""], desc: "Top strutturato con linea decisa e scollo pulito, base statement per l'outfit loud." },
+      { id: 4, name: "Blazer sartoriale", price: 420, attitude: "silent", tag: "Blazer", img: "", imgs: ["", ""], desc: "Blazer sartoriale in palette neutra, taglio preciso e finiture discrete." },
+      { id: 5, name: "Pantalone wide leg", price: 260, attitude: "silent", tag: "Pantaloni", img: "", imgs: ["", ""], desc: "Pantalone wide leg con caduta morbida e vita alta, silhouette silenziosa e iconica." },
+      { id: 6, name: "Canotta in seta", price: 140, attitude: "silent", tag: "Top", img: "", imgs: ["", ""], desc: "Canotta in seta leggera, layering essenziale per un look silent raffinato." },
+      { id: 7, name: "Maglia oversize", price: 195, attitude: "lazy", tag: "Knitwear", img: "", imgs: ["", ""], desc: "Maglia oversize in cashmere misto, volume morbido e comfort da relaxed luxury." },
+      { id: 8, name: "Jogger in lino", price: 175, attitude: "lazy", tag: "Pantaloni", img: "", imgs: ["", ""], desc: "Jogger in lino con cintura coulisse e linea decontratta per il mood lazy." },
+      { id: 9, name: "Cardigan lungo", price: 240, attitude: "lazy", tag: "Knitwear", img: "", imgs: ["", ""], desc: "Cardigan lungo aperto, layering soft per completare l'outfit lazy." },
+      { id: 10, name: "Sneaker in pelle", price: 290, attitude: "loud", tag: "Calzature", img: "", imgs: ["", ""], desc: "Sneaker in pelle nera, linea pulita e suola chunky per completare il look loud." }
     ];
 
     let currentProduct = null;
+    let fittingRoom = null;
 
     function getCart() {
       try {
@@ -566,6 +630,11 @@
       sessionStorage.setItem("activeProductId", String(product.id));
       renderProduct(product);
       updateCartCount();
+      fittingRoom = FittingRoom.init({
+        root: "#fitting-room",
+        products: PRODUCTS,
+        getMode: function () { return currentProduct ? currentProduct.attitude : "loud"; }
+      });
     }
 
     const nav = document.querySelector(".nav");

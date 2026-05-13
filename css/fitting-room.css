@@ -1,0 +1,265 @@
+.fitting-room {
+  border-top: 1px solid var(--border);
+}
+
+.fitting-room-body {
+  padding: 28px 24px 36px;
+}
+
+.fitting-hint {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: none;
+  margin: -8px 0 24px;
+  max-width: 640px;
+  line-height: 1.8;
+}
+
+.fitting-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.95fr) minmax(260px, 1.1fr) minmax(220px, 0.95fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.fitting-panel-title {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #aaa;
+  margin-bottom: 16px;
+}
+
+.fitting-pieces {
+  display: grid;
+  gap: 14px;
+}
+
+.fitting-piece {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: grab;
+  text-align: left;
+}
+
+.fitting-piece.is-dragging {
+  opacity: 0.55;
+}
+
+.fitting-piece-media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: #f0efeb;
+  overflow: hidden;
+}
+
+.fitting-piece-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+.fitting-piece-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-align: center;
+  text-transform: none;
+}
+
+.fitting-piece-name {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: lowercase;
+  margin-bottom: 6px;
+}
+
+.fitting-piece-slot {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-transform: none;
+}
+
+.fitting-stage {
+  display: flex;
+  justify-content: center;
+}
+
+.fitting-mannequin {
+  position: relative;
+  width: min(100%, 320px);
+  aspect-ratio: 3 / 5;
+  background: #f8f7f3;
+}
+
+.fitting-figure {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.fitting-figure svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fitting-zone {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #cfcfca;
+  background: rgba(255, 255, 255, 0.45);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.fitting-zone.is-over {
+  border-color: var(--fg);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.fitting-zone.is-filled {
+  border-style: solid;
+  border-color: #d8d8d4;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.fitting-zone.is-filled .fitting-zone-label {
+  opacity: 0;
+}
+
+.fitting-zone-label {
+  position: relative;
+  z-index: 1;
+  padding: 6px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #aaa;
+  text-align: center;
+  text-transform: none;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.fitting-layer-viewport {
+  position: absolute;
+  inset: 8%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.fitting-layer {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.fitting-zone:not(.is-filled) .fitting-layer-viewport {
+  display: none;
+}
+
+.fitting-zone--top {
+  top: 18%;
+  left: 18%;
+  width: 64%;
+  height: 24%;
+}
+
+.fitting-zone--bottom {
+  top: 42%;
+  left: 22%;
+  width: 56%;
+  height: 28%;
+}
+
+.fitting-zone--shoes {
+  top: 72%;
+  left: 24%;
+  width: 52%;
+  height: 14%;
+}
+
+.fitting-zone--accessory {
+  top: 58%;
+  left: 4%;
+  width: 28%;
+  height: 22%;
+}
+
+.fitting-current-list {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.fitting-current-item {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.fitting-current-slot {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #aaa;
+  text-transform: none;
+}
+
+.fitting-current-name {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: lowercase;
+}
+
+.fitting-remove {
+  justify-self: start;
+  margin-top: 4px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.fitting-remove:hover {
+  color: var(--fg);
+}
+
+.fitting-empty {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-transform: none;
+  line-height: 1.8;
+}
+
+@media (max-width: 900px) {
+  .fitting-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .fitting-stage {
+    order: -1;
+  }
+}
