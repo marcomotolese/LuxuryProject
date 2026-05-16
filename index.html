@@ -20,7 +20,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Apartment Cosenza</title>
+  <title>Nome dello shop</title>
   <link rel="stylesheet" href="css/fitting-room.css">
   <style>
     :root {
@@ -334,56 +334,6 @@
       letter-spacing: 1px;
     }
 
-    .switcher-label {
-      font-size: 9px;
-      letter-spacing: 3px;
-      color: #aaa;
-      margin-bottom: 10px;
-    }
-
-    .switcher {
-      display: flex;
-      border: 1px solid #e0e0e0;
-      max-width: 420px;
-    }
-
-    .sw-btn {
-      flex: 1;
-      padding: 14px 6px;
-      font-size: 9px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      background: #fff;
-      border: none;
-      border-right: 1px solid #e0e0e0;
-      cursor: pointer;
-      color: #bbb;
-      font-family: inherit;
-    }
-
-    .sw-btn:last-child {
-      border-right: none;
-    }
-
-    .sw-btn.active {
-      background: #111;
-      color: #fff;
-    }
-
-    .sw-btn:hover:not(.active) {
-      color: #555;
-    }
-
-    .mode-desc {
-      font-size: 10px;
-      color: #999;
-      letter-spacing: 0.5px;
-      line-height: 1.8;
-      margin-top: 14px;
-      max-width: 640px;
-      text-transform: none;
-    }
-
     .cta-btn {
       padding: 10px 98px;
       border: 1px solid var(--fg);
@@ -398,8 +348,7 @@
       color: var(--bg);
     }
 
-    #categories,
-    #special-categories {
+    #categories {
       border-bottom: 1px solid var(--border);
     }
 
@@ -432,22 +381,6 @@
 
     .categories-list span {
       color: var(--muted);
-    }
-
-    .special-group {
-      border-top: 1px solid var(--border);
-    }
-
-    .special-group-title {
-      padding: 22px 24px 10px;
-      font-size: 9px;
-      letter-spacing: 3px;
-      color: #aaa;
-    }
-
-    .categories-list--nested button {
-      padding-left: 40px;
-      font-size: 10px;
     }
 
     .footer {
@@ -615,11 +548,11 @@
     }
   </style>
 </head>
-<body>
+<body class="home">
   <div class="page">
     <header class="nav">
       <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-drawer" aria-label="Apri menu">Menu</button>
-      <a href="#hero" class="nav-logo">The Apartment</a>
+      <a href="#hero" class="nav-logo" data-shop-name>Nome dello shop</a>
       <div class="nav-drawer" id="nav-drawer">
         <div class="nav-left">
           <button type="button" class="nav-icon" aria-label="Cerca">Search</button>
@@ -643,33 +576,98 @@
               <span class="hero-title-line">New</span>
               <span class="hero-title-line hero-title-line--collection">Collection</span>
             </div>
-            <p class="hero-season">Spring SS26</p>
+            <p class="hero-season">Spring Summer26</p>
           </div>
-          <a href="#categories" class="hero-cta">Shop now</a>
+          <a href="#categories" class="hero-cta">Shop now<span class="hero-cta-arrow" aria-hidden="true">→</span></a>
         </div>
+
+        <section id="how-it-works" class="how-it-works" aria-labelledby="how-it-works-title">
+          <div class="how-it-works-inner">
+            <h2 class="how-it-works-title" id="how-it-works-title">Come funziona</h2>
+            <div class="how-it-works-grid">
+              <article class="how-it-works-item">
+                <span class="how-it-works-num" aria-hidden="true">01</span>
+                <h3 class="how-it-works-item-title">Scegli la tua Attitude</h3>
+                <p class="how-it-works-item-text">LOUD, SILENT o LAZY: ogni mood ha i suoi look. Cambia attitude e i prodotti si aggiornano in tempo reale.</p>
+              </article>
+              <article class="how-it-works-item">
+                <span class="how-it-works-num" aria-hidden="true">02</span>
+                <h3 class="how-it-works-item-title">Esplora l'outfit completo</h3>
+                <p class="how-it-works-item-text">Ogni prodotto fa parte di un outfit curato. Clicca su un pezzo per vedere come si indossa nell'insieme.</p>
+              </article>
+              <article class="how-it-works-item">
+                <span class="how-it-works-num" aria-hidden="true">03</span>
+                <h3 class="how-it-works-item-title">Prova nel fitting room</h3>
+                <p class="how-it-works-item-text">Trascina i capi sul manichino digitale per comporre il tuo look prima di aggiungere al carrello.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
         <div class="outfit-body">
           <div class="section-header">
             <h2 class="section-title">Ready-to-wear</h2>
           </div>
-          <div class="outfit-grid">
-            <article class="outfit-slot-wrap outfit-card" data-slot="0" data-product-id="1" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
-              <div class="outfit-slot" id="slot-1"><span class="ph-label">Look 1</span></div>
+          <div class="attitude-switcher-section">
+            <p class="attitude-switcher-heading">Come vuoi vestirti oggi?</p>
+            <div class="attitude-switcher" id="attitude-switcher" role="group" aria-label="Seleziona attitude">
+              <div class="attitude-switcher-item" data-mode="loud">
+                <button type="button" class="attitude-btn attitude-btn--loud" data-mode="loud" aria-pressed="false" onclick="selectAttitude('loud')">
+                  <span class="attitude-btn-name">LOUD</span>
+                  <span class="attitude-btn-tag">Statement</span>
+                </button>
+                <p class="attitude-keywords" hidden>Pezzi statement · Silhouette forti · Colori decisi</p>
+              </div>
+              <div class="attitude-switcher-item" data-mode="silent">
+                <button type="button" class="attitude-btn attitude-btn--silent" data-mode="silent" aria-pressed="false" onclick="selectAttitude('silent')">
+                  <span class="attitude-btn-name">SILENT</span>
+                  <span class="attitude-btn-tag">Tailoring</span>
+                </button>
+                <p class="attitude-keywords" hidden>Tailoring · Palette neutra · Iconico</p>
+              </div>
+              <div class="attitude-switcher-item" data-mode="lazy">
+                <button type="button" class="attitude-btn attitude-btn--lazy" data-mode="lazy" aria-pressed="false" onclick="selectAttitude('lazy')">
+                  <span class="attitude-btn-name">LAZY</span>
+                  <span class="attitude-btn-tag">Relaxed</span>
+                </button>
+                <p class="attitude-keywords" hidden>Knitwear · Layering soft · Comfort luxury</p>
+              </div>
+            </div>
+          </div>
+          <div class="outfit-grid" id="outfit-grid">
+            <article class="outfit-slot-wrap outfit-card" data-slot="0" data-product-id="1" data-attitude="loud" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
+              <span class="outfit-card-tooltip" role="tooltip">LOUD — Statement · Bold</span>
+              <div class="outfit-slot" id="slot-1">
+                <span class="outfit-attitude-badge outfit-attitude-badge--loud" aria-hidden="true"></span>
+                <span class="ph-label">Look 1</span>
+              </div>
               <div class="slot-meta">
                 <span class="slot-name" id="slot-name-1">Blazer oversize</span>
+                <span class="outfit-attitude-mobile">LOUD — Statement · Bold</span>
                 <span class="slot-price" id="slot-price-1">€ 380</span>
               </div>
             </article>
-            <article class="outfit-slot-wrap outfit-card" data-slot="1" data-product-id="2" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
-              <div class="outfit-slot" id="slot-2"><span class="ph-label">Look 2</span></div>
+            <article class="outfit-slot-wrap outfit-card" data-slot="1" data-product-id="2" data-attitude="loud" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
+              <span class="outfit-card-tooltip" role="tooltip">LOUD — Statement · Bold</span>
+              <div class="outfit-slot" id="slot-2">
+                <span class="outfit-attitude-badge outfit-attitude-badge--loud" aria-hidden="true"></span>
+                <span class="ph-label">Look 2</span>
+              </div>
               <div class="slot-meta">
                 <span class="slot-name" id="slot-name-2">Gonna midi</span>
+                <span class="outfit-attitude-mobile">LOUD — Statement · Bold</span>
                 <span class="slot-price" id="slot-price-2">€ 220</span>
               </div>
             </article>
-            <article class="outfit-slot-wrap outfit-card" data-slot="2" data-product-id="3" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
-              <div class="outfit-slot" id="slot-3"><span class="ph-label">Look 3</span></div>
+            <article class="outfit-slot-wrap outfit-card" data-slot="2" data-product-id="3" data-attitude="loud" role="button" tabindex="0" onclick="goToProduct(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToProduct(event);}">
+              <span class="outfit-card-tooltip" role="tooltip">LOUD — Statement · Bold</span>
+              <div class="outfit-slot" id="slot-3">
+                <span class="outfit-attitude-badge outfit-attitude-badge--loud" aria-hidden="true"></span>
+                <span class="ph-label">Look 3</span>
+              </div>
               <div class="slot-meta">
                 <span class="slot-name" id="slot-name-3">Top strutturato</span>
+                <span class="outfit-attitude-mobile">LOUD — Statement · Bold</span>
                 <span class="slot-price" id="slot-price-3">€ 160</span>
               </div>
             </article>
@@ -682,11 +680,41 @@
           <div class="section-header">
             <h2 class="section-title">Digital fitting room</h2>
           </div>
-          <p class="fitting-hint">Trascina i pezzi senza sfondo sul manichino oppure tocca una card per indossarli nello slot corretto.</p>
+          <p class="fitting-hint">Griglia 2×2 con tutti i pezzi: usa le frecce per gli altri 5. Trascina o tocca per indossarli. A destra, allineamento e consigli.</p>
+          <ol class="fitting-steps" aria-label="Come usare la fitting room">
+            <li class="fitting-step fitting-step--1">
+              <span class="fitting-step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 11V6.5a1.5 1.5 0 1 1 3 0V11"></path>
+                  <path d="M11 10.5V5.5a1.5 1.5 0 0 1 3 0V11"></path>
+                  <path d="M8 11v5.5a3.5 3.5 0 0 0 3.5 3.5H13a3.5 3.5 0 0 0 3.5-3.5V11"></path>
+                  <path d="M8 14.5H6a1.5 1.5 0 0 0 0 3h2"></path>
+                </svg>
+              </span>
+              <span class="fitting-step-text">Seleziona un pezzo</span>
+            </li>
+            <li class="fitting-step fitting-step--2">
+              <span class="fitting-step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h11"></path>
+                  <path d="M13 8l4 4-4 4"></path>
+                </svg>
+              </span>
+              <span class="fitting-step-text">Trascinalo sul manichino</span>
+            </li>
+            <li class="fitting-step fitting-step--3">
+              <span class="fitting-step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 12.5l4 4L18 8"></path>
+                </svg>
+              </span>
+              <span class="fitting-step-text">Composizione outfit</span>
+            </li>
+          </ol>
           <div class="fitting-layout">
             <aside class="fitting-palette">
               <h3 class="fitting-panel-title">Seleziona pezzi</h3>
-              <div class="fitting-pieces" data-fitting-pieces></div>
+              <div data-fitting-palette-body></div>
             </aside>
             <div class="fitting-stage">
               <div class="fitting-mannequin">
@@ -728,7 +756,7 @@
               </div>
             </div>
             <aside class="fitting-summary">
-              <h3 class="fitting-panel-title">Outfit corrente</h3>
+              <h3 class="fitting-panel-title">Style match</h3>
               <div data-fitting-current>
                 <p class="fitting-empty">Nessun pezzo selezionato</p>
               </div>
@@ -742,41 +770,31 @@
           <h2 class="section-title">Categories</h2>
         </div>
         <ul class="categories-list" id="categories-list">
-          <li><button type="button" data-category="clothes" onclick="filterCategory('clothes', this)">Clothes <span>/</span></button></li>
-          <li><button type="button" data-category="shoes" onclick="filterCategory('shoes', this)">Shoes <span>/</span></button></li>
-          <li><button type="button" data-category="bags" onclick="filterCategory('bags', this)">Bags <span>/</span></button></li>
-          <li><button type="button" data-category="accessories" onclick="filterCategory('accessories', this)">Accessories <span>/</span></button></li>
+          <li><button type="button" data-category="clothes" onclick="filterCategory('clothes', this)"><span class="category-name">Clothes</span> <span>/</span></button></li>
+          <li><button type="button" data-category="shoes" onclick="filterCategory('shoes', this)"><span class="category-name">Shoes</span> <span>/</span></button></li>
+          <li><button type="button" data-category="bags" onclick="filterCategory('bags', this)"><span class="category-name">Bags</span> <span>/</span></button></li>
+          <li><button type="button" data-category="accessories" onclick="filterCategory('accessories', this)"><span class="category-name">Accessories</span> <span>/</span></button></li>
         </ul>
       </section>
 
-      <section id="special-categories">
-        <div class="section-header" style="padding:28px 24px 18px;margin-bottom:0">
-          <h2 class="section-title">Special Categories</h2>
-        </div>
-        <div class="special-group">
-          <p class="special-group-title">Attitude</p>
-          <ul class="categories-list categories-list--nested" id="special-categories-list">
-            <li><button type="button" data-mode="loud" onclick="filterAttitude('loud', this)">Loud <span>/</span></button></li>
-            <li><button type="button" data-mode="silent" onclick="filterAttitude('silent', this)">Silent <span>/</span></button></li>
-            <li><button type="button" data-mode="lazy" onclick="filterAttitude('lazy', this)">Lazy <span>/</span></button></li>
-          </ul>
-        </div>
-      </section>
-    </main>
+      <section id="categories">
 
     <footer class="footer" id="contact">
       <div class="footer-grid">
         <div class="footer-col" id="about">
-          <h3>The Apartment Cosenza</h3>
+          <h3 data-shop-name>Nome dello shop</h3>
           <p>Via Roma 12, 87100 Cosenza</p>
-          <p>info@theapartmentcosenza.it</p>
+          <p data-shop-email>info@nomedelloshop.it</p>
         </div>
         <div class="footer-col">
           <h3>Newsletter</h3>
-          <form class="newsletter-form" id="newsletter-form" action="#" method="post">
-            <input type="email" name="email" placeholder="La tua email" aria-label="Email" required>
-            <button type="submit">Invia</button>
-          </form>
+          <div class="newsletter-form-wrap">
+            <form class="newsletter-form" id="newsletter-form" action="#" method="post">
+              <input type="email" name="email" placeholder="La tua email" aria-label="Email" required>
+              <button type="submit">Invia</button>
+            </form>
+            <p class="newsletter-toast" id="newsletter-toast" role="status" aria-live="polite" hidden>Grazie! Ti terremo aggiornata.</p>
+          </div>
         </div>
         <div class="footer-col">
           <h3>Social</h3>
@@ -787,6 +805,35 @@
     </footer>
   </div>
 
+  <div id="attitude-onboarding" class="onboarding" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
+    <div class="onboarding-panel">
+      <button type="button" class="onboarding-skip" id="onboarding-skip">Salta</button>
+      <p class="onboarding-intro" id="onboarding-title">Scegli la tua attitude</p>
+      <div class="onboarding-cards">
+        <article class="onboarding-card onboarding-card--loud">
+          <h2 class="onboarding-name">LOUD</h2>
+          <p class="onboarding-keyword">Statement · Bold</p>
+          <p class="onboarding-desc">Pezzi statement e silhouette forti che non passano inosservati.</p>
+          <button type="button" class="onboarding-enter" data-mode="loud">Entra</button>
+        </article>
+        <article class="onboarding-card onboarding-card--silent">
+          <h2 class="onboarding-name">SILENT</h2>
+          <p class="onboarding-keyword">Tailoring · Neutro</p>
+          <p class="onboarding-desc">Tailoring impeccabile e palette neutra, lusso senza rumore.</p>
+          <button type="button" class="onboarding-enter" data-mode="silent">Entra</button>
+        </article>
+        <article class="onboarding-card onboarding-card--lazy">
+          <h2 class="onboarding-name">LAZY</h2>
+          <p class="onboarding-keyword">Relaxed Luxury</p>
+          <p class="onboarding-desc">Knitwear morbido e layering rilassato, comfort che è statement.</p>
+          <button type="button" class="onboarding-enter" data-mode="lazy">Entra</button>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/shop-config.js"></script>
+  <script src="js/attitude-switcher.js"></script>
   <script src="js/fitting-room.js"></script>
   <script>
     const CATEGORY_TAGS = {
@@ -877,24 +924,54 @@
       return getProductImages(product, item)[0] || "";
     }
 
-    function setMode(mode) {
+    function setMode(mode, options) {
+      const opts = options || {};
       const m = MODES[mode];
-      activeMode = mode;
+      const grid = document.getElementById("outfit-grid");
 
-      document.querySelectorAll("#special-categories-list button").forEach(function (btn) {
-        btn.classList.toggle("is-active", btn.dataset.mode === mode);
-      });
+      function applyMode() {
+        activeMode = mode;
 
-      activeCategory = null;
-      activeCategoryButton = null;
-      document.querySelectorAll("#categories-list button").forEach(function (btn) {
-        btn.classList.remove("is-active");
-      });
+        if (window.AttitudeSwitcher) {
+          AttitudeSwitcher.sync(mode);
+        }
 
-      sessionStorage.setItem("attitude", mode);
-      updateHeroMedia(mode, m);
-      updateOutfitSlots(m.items);
-      if (fittingRoom) fittingRoom.reset();
+        activeCategory = null;
+        activeCategoryButton = null;
+        document.querySelectorAll("#categories-list button").forEach(function (btn) {
+          btn.classList.remove("is-active");
+        });
+
+        sessionStorage.setItem("attitude", mode);
+        updateHeroMedia(mode, m);
+        updateOutfitSlots(m.items);
+        if (fittingRoom) fittingRoom.reset();
+      }
+
+      if (opts.skipAnimation || !grid) {
+        applyMode();
+        return;
+      }
+
+      grid.classList.remove("is-entering");
+      grid.classList.add("is-leaving");
+
+      window.setTimeout(function () {
+        applyMode();
+        grid.classList.remove("is-leaving");
+        grid.classList.add("is-entering");
+
+        window.requestAnimationFrame(function () {
+          window.requestAnimationFrame(function () {
+            grid.classList.remove("is-entering");
+          });
+        });
+      }, 300);
+    }
+
+    function selectAttitude(mode) {
+      if (mode === activeMode) return;
+      setMode(mode);
     }
 
     function updateHeroMedia(mode, modeData) {
@@ -904,6 +981,47 @@
         return;
       }
       hero.innerHTML = '<span class="ph-label">Inserisci foto hero ' + mode + '</span>';
+    }
+
+    function getAttitudeTooltipLine(attitude) {
+      if (window.AttitudeSwitcher && AttitudeSwitcher.getTooltipLine) {
+        return AttitudeSwitcher.getTooltipLine(attitude);
+      }
+      return attitude ? attitude.toUpperCase() : "";
+    }
+
+    function updateOutfitAttitudeChrome(card, slot, nameEl, attitude) {
+      const line = getAttitudeTooltipLine(attitude);
+
+      if (attitude) {
+        card.setAttribute("data-attitude", attitude);
+      } else {
+        card.removeAttribute("data-attitude");
+      }
+
+      let tooltip = card.querySelector(".outfit-card-tooltip");
+      if (!tooltip) {
+        tooltip = document.createElement("span");
+        tooltip.className = "outfit-card-tooltip";
+        tooltip.setAttribute("role", "tooltip");
+        card.insertBefore(tooltip, card.firstChild);
+      }
+      tooltip.textContent = line;
+
+      let mobile = card.querySelector(".outfit-attitude-mobile");
+      if (!mobile) {
+        mobile = document.createElement("span");
+        mobile.className = "outfit-attitude-mobile";
+        nameEl.insertAdjacentElement("afterend", mobile);
+      }
+      mobile.textContent = line;
+
+      const badgeClass = attitude
+        ? "outfit-attitude-badge outfit-attitude-badge--" + attitude
+        : "";
+      return badgeClass
+        ? '<span class="' + badgeClass + '" aria-hidden="true"></span>'
+        : "";
     }
 
     function updateOutfitSlots(items) {
@@ -921,16 +1039,22 @@
 
         if (!item) {
           card.removeAttribute("data-product-id");
+          card.removeAttribute("data-attitude");
           card.classList.add("is-empty");
           card.setAttribute("aria-disabled", "true");
           nameEl.textContent = "";
           priceEl.textContent = "";
+          const tooltip = card.querySelector(".outfit-card-tooltip");
+          const mobile = card.querySelector(".outfit-attitude-mobile");
+          if (tooltip) tooltip.textContent = "";
+          if (mobile) mobile.textContent = "";
           slot.innerHTML = '<span class="ph-label">—</span>';
           continue;
         }
 
         const product = findProduct(item);
         const name = product ? product.name : item.name;
+        const attitude = product ? product.attitude : activeMode;
         nameEl.textContent = name;
         priceEl.textContent = "€ " + item.price.toLocaleString("it-IT");
 
@@ -944,11 +1068,12 @@
           card.setAttribute("aria-disabled", "true");
         }
 
+        const badgeHtml = updateOutfitAttitudeChrome(card, slot, nameEl, attitude);
         const cover = getProductCover(product, item);
         if (cover) {
-          slot.innerHTML = '<img src="' + cover + '" alt="' + name + '">';
+          slot.innerHTML = badgeHtml + '<img src="' + cover + '" alt="' + name + '">';
         } else {
-          slot.innerHTML = '<span class="ph-label">Look ' + i + '</span>';
+          slot.innerHTML = badgeHtml + '<span class="ph-label">Look ' + i + '</span>';
         }
       }
     }
@@ -970,17 +1095,8 @@
       location.assign("product.html?id=" + encodeURIComponent(productId));
     }
 
-    function filterAttitude(mode, btn) {
-      setMode(mode);
-
-      document.querySelectorAll("#special-categories-list button").forEach(function (button) {
-        button.classList.toggle("is-active", button === btn);
-      });
-
-      const outfitBody = document.querySelector(".outfit-body");
-      if (outfitBody) {
-        outfitBody.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+    function filterAttitude(mode) {
+      selectAttitude(mode);
     }
 
     function filterCategory(category, btn) {
@@ -1028,13 +1144,70 @@
 
     const savedRaw = sessionStorage.getItem("attitude") || "loud";
     const saved = savedRaw === "laze" ? "lazy" : savedRaw;
-    setMode(saved);
+    setMode(saved, { skipAnimation: true });
+
+    const ONBOARDING_KEY = "luxury_attitude_onboarding_seen";
+
+    function closeOnboarding() {
+      const el = document.getElementById("attitude-onboarding");
+      if (!el) return;
+      el.hidden = true;
+      el.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    function completeOnboarding(mode) {
+      try {
+        localStorage.setItem(ONBOARDING_KEY, "1");
+      } catch (error) {
+        /* ignore */
+      }
+      if (mode) {
+        setMode(mode, { skipAnimation: true });
+      }
+      closeOnboarding();
+    }
+
+    function initOnboarding() {
+      let seen = false;
+      try {
+        seen = localStorage.getItem(ONBOARDING_KEY) === "1";
+      } catch (error) {
+        seen = false;
+      }
+      if (seen) return;
+
+      const el = document.getElementById("attitude-onboarding");
+      if (!el) return;
+
+      el.hidden = false;
+      el.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      document.getElementById("onboarding-skip").addEventListener("click", function () {
+        completeOnboarding(null);
+      });
+
+      el.querySelectorAll(".onboarding-enter").forEach(function (button) {
+        button.addEventListener("click", function () {
+          completeOnboarding(button.getAttribute("data-mode"));
+        });
+      });
+
+      document.addEventListener("keydown", function onEscape(event) {
+        if (event.key !== "Escape" || el.hidden) return;
+        completeOnboarding(null);
+      });
+    }
 
     fittingRoom = FittingRoom.init({
       root: "#fitting-room",
       products: PRODUCTS,
-      getMode: function () { return activeMode; }
+      getMode: function () { return activeMode; },
+      palettePageSize: 5
     });
+
+    initOnboarding();
 
     const nav = document.querySelector(".nav");
     function syncNav() {
@@ -1083,10 +1256,31 @@
       });
     }
 
-    document.getElementById("newsletter-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      this.reset();
-    });
+    (function initNewsletterToast() {
+      var form = document.getElementById("newsletter-form");
+      var toast = document.getElementById("newsletter-toast");
+      if (!form || !toast) return;
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        form.reset();
+        toast.hidden = false;
+        toast.classList.add("is-visible");
+        clearTimeout(toast._hideTimer);
+        toast._hideTimer = window.setTimeout(function () {
+          toast.classList.remove("is-visible");
+          window.setTimeout(function () {
+            toast.hidden = true;
+          }, 300);
+        }, 3000);
+      });
+    })();
   </script>
+
+  <nav class="attitude-sticky-mobile attitude-switcher" id="attitude-sticky-mobile" role="group" aria-label="Seleziona attitude">
+    <button type="button" class="attitude-sticky-btn attitude-btn" data-mode="loud" aria-pressed="true" onclick="filterAttitude('loud')">LOUD</button>
+    <button type="button" class="attitude-sticky-btn attitude-btn" data-mode="silent" aria-pressed="false" onclick="filterAttitude('silent')">SILENT</button>
+    <button type="button" class="attitude-sticky-btn attitude-btn" data-mode="lazy" aria-pressed="false" onclick="filterAttitude('lazy')">LAZY</button>
+  </nav>
 </body>
 </html>
